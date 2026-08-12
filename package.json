@@ -1,6 +1,7 @@
 {
   "name": "@metis-rwa/mcp",
   "version": "0.1.0",
+  "mcpName": "io.github.metis-rwa/mcp",
   "description": "Model Context Protocol server for tokenized real-world-asset research on Solana: live on-chain checks, market signals, and the published Metis research corpus.",
   "license": "MIT",
   "type": "module",
@@ -11,6 +12,7 @@
   "files": [
     "dist",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "engines": {
@@ -34,6 +36,7 @@
     "dev": "tsx src/index.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test test/*.test.mjs",
+    "verify-assets": "npm run build && node scripts/verify-assets.mjs",
     "inspector": "npx @modelcontextprotocol/inspector node dist/index.js",
     "prepare": "npm run build"
   },

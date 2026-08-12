@@ -20,25 +20,52 @@ export function registerOnChainTools(server: McpServer, ctx: ToolContext): void 
       title: "List tokenized assets",
       description:
         "List the tokenized real-world assets this server knows by symbol, with their Solana mint and the security each one tracks. Every other tool also accepts a raw mint address, so this list is a starting point rather than a limit.",
-      inputSchema: {},
+      inputSchema: {
+        query: z
+          .string()
+          .optional()
+          .describe(
+            "Filter by substring against symbol, name, or tracked ticker. For example \"gold\", \"AAPL\", or \"bank\".",
+          ),
+        assetType: z
+          .enum(["tokenized_equity", "fund", "stablecoin", "commodity", "bond", "other"])
+          .optional()
+          .describe("Filter by what the token tracks. Funds cover index, treasury, and commodity fund shares."),
+      },
       annotations: { ...READ_ONLY, openWorldHint: false },
     },
-    async () =>
+    async ({ query, assetType }) =>
       guard(async () => {
-        const assets = assetRegistry();
+        const needle = query?.trim().toLowerCase();
+        const assets = assetRegistry().filter((a) => {
+          if (assetType && a.assetType !== assetType) return false;
+          if (!needle) return true;
+          return (
+            a.symbol.toLowerCase().includes(needle) ||
+            a.name.toLowerCase().includes(needle) ||
+            (a.referenceTicker?.toLowerCase().includes(needle) ?? false)
+          );
+        });
+
+        if (assets.length === 0) {
+          return ok(
+            `Nothing in the registry matches that filter. It holds ${assetRegistry().length} assets; call this tool without arguments to see them all.`,
+          );
+        }
+
+        const issuers = [...new Set(assets.map((a) => a.issuerName))];
         const body = table(
-          ["Symbol", "Name", "Type", "Tracks", "Issuer", "Mint"],
+          ["Symbol", "Name", "Type", "Tracks", "Mint"],
           assets.map((a) => [
             a.symbol,
             a.name,
-            a.assetType.replaceAll("_", " "),
+            a.assetType === "tokenized_equity" ? "equity" : a.assetType,
             a.referenceTicker ?? "n/a",
-            a.issuerName,
             a.mint,
           ]),
         );
         return ok(
-          `${body}\n\nAdd more assets with a JSON file at METIS_ASSETS_FILE. Mints listed here were verified on Solana mainnet before being added.`,
+          `${assets.length} asset(s), issued by ${issuers.join(", ")}.\n\n${body}\n\nEvery mint was read back from the chain before it was listed, and the names are the ones written into each mint's own metadata. Add more assets with a JSON file at METIS_ASSETS_FILE.`,
         );
       }),
   );

@@ -85,6 +85,11 @@ Research:
 Every tool takes either a registry symbol (`TSLAx`) or a raw Solana mint
 address, so assets outside the registry work too.
 
+The registry ships with the 72 xStocks on Solana, from `AAPLx` through `XOMx`,
+including the index and commodity fund shares (`SPYx`, `QQQx`, `GLDx`, `PPLTx`,
+`TBLLx`) and the private-market listings (`SPCXx`, `VCXx`). Filter it with
+`list_rwa_assets`, by substring or by asset type.
+
 Two prompts ship with the server: `rwa_due_diligence` walks an asset through
 controls, supply, concentration, depth, and premium, and `premium_watch` reads a
 price gap against stored history. Two resources are exposed as well:
@@ -143,7 +148,14 @@ refuse.
 ```
 
 Verify a mint against the chain before adding it. A wrong address returns
-confident, wrong answers.
+confident, wrong answers. Everything already in the registry was read back from
+Solana first: the names and symbols in `src/assets.ts` are the ones written into
+each mint's own Token-2022 metadata, not labels copied from a token list. Check
+them again at any time:
+
+```bash
+npm run verify-assets
+```
 
 ## How an observation cycle works
 
@@ -186,6 +198,21 @@ npm run inspector
 
 Tests cover the analysis rules, the control translations, the registry, and the
 history store. They run against the build, so `npm test` builds first.
+
+## Releasing
+
+The package publishes to npm as `@metis-rwa/mcp`, and `server.json` describes it
+for the MCP registry. The registry proves ownership by matching `mcpName` in
+`package.json` against the server name in `server.json`, so those two strings
+have to stay in step.
+
+1. Bump the version in `package.json` and in both places in `server.json`, then
+   add a `CHANGELOG.md` entry.
+2. `npm run verify-assets` to confirm the registry still matches the chain.
+3. `npm test`.
+4. `npm publish --access public`.
+5. `mcp-publisher login github` then `mcp-publisher publish` to list the release
+   in the MCP registry.
 
 ## License
 

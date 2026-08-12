@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { XSTOCKS } from "./assets.js";
 
 export interface RegisteredAsset {
   id: string;
@@ -19,45 +20,11 @@ export interface RegisteredAsset {
   issuerName: string;
 }
 
-/** Mints verified against Solana mainnet with getTokenSupply before being
- *  listed here. An unverified address is worse than no address, so the built-in
- *  set stays small; extra assets come from METIS_ASSETS_FILE and every tool
- *  also accepts a raw mint. */
-const BUILT_IN: RegisteredAsset[] = [
-  {
-    id: "asset_tslax",
-    symbol: "TSLAx",
-    name: "Tesla xStock",
-    assetType: "tokenized_equity",
-    chain: "solana",
-    mint: "XsDoVfqeBukxuZHWhdvWHBhgEHjGNst4MLodqsJHzoB",
-    decimals: 8,
-    referenceTicker: "TSLA",
-    issuerName: "Backed Assets",
-  },
-  {
-    id: "asset_nvdax",
-    symbol: "NVDAx",
-    name: "NVIDIA xStock",
-    assetType: "tokenized_equity",
-    chain: "solana",
-    mint: "Xsc9qvGR1efVDFGLrVsmkzv3qi45LTBjeUKSPmx9qEh",
-    decimals: 8,
-    referenceTicker: "NVDA",
-    issuerName: "Backed Assets",
-  },
-  {
-    id: "asset_spyx",
-    symbol: "SPYx",
-    name: "SP500 xStock",
-    assetType: "tokenized_equity",
-    chain: "solana",
-    mint: "XsoCS1TfEyfFhfvj8EtZ528L3CaKBDBRqRapnBbDF2W",
-    decimals: 8,
-    referenceTicker: "SPY",
-    issuerName: "Backed Assets",
-  },
-];
+/** The built-in universe. An unverified mint address is worse than no address,
+ *  so nothing lands here without being read back from the chain first. Anything
+ *  outside this list still works: tools accept a raw mint, and
+ *  METIS_ASSETS_FILE registers extra assets by symbol. */
+const BUILT_IN: RegisteredAsset[] = XSTOCKS;
 
 function loadExtraAssets(path: string): RegisteredAsset[] {
   const raw = JSON.parse(readFileSync(path, "utf8")) as unknown;

@@ -11,6 +11,27 @@ test("registry entries carry a mint and a reference ticker", () => {
   }
 });
 
+test("ids, symbols, and mints are unique", () => {
+  const assets = assetRegistry();
+  for (const field of ["id", "symbol", "mint"]) {
+    const values = assets.map((a) => a[field]);
+    assert.equal(
+      new Set(values).size,
+      values.length,
+      `duplicate ${field} in the registry`,
+    );
+  }
+});
+
+test("every entry tracks a ticker derived from its symbol", () => {
+  for (const asset of assetRegistry()) {
+    assert.ok(asset.symbol.endsWith("x"), `${asset.symbol} is not an xStock symbol`);
+    assert.equal(asset.referenceTicker, asset.symbol.slice(0, -1));
+    assert.equal(asset.decimals, 8);
+    assert.ok(asset.name.includes("xStock"));
+  }
+});
+
 test("symbols resolve regardless of case", () => {
   const upper = resolveAsset("TSLAX");
   const exact = resolveAsset("TSLAx");

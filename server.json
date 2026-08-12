@@ -1,0 +1,55 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.metis-rwa/mcp",
+  "title": "Metis RWA Research",
+  "description": "Research tokenized real-world assets on Solana: issuer controls, supply, liquidity, premiums",
+  "version": "0.1.0",
+  "websiteUrl": "https://metisagent.co",
+  "repository": {
+    "url": "https://github.com/metis-rwa/mcp",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "@metis-rwa/mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "SOLANA_RPC_URL",
+          "description": "Solana JSON-RPC endpoint. Public nodes throttle the heavier reads, so a dedicated endpoint is recommended.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "METIS_API_URL",
+          "description": "Base URL of the Metis research API. Defaults to https://metisagent.co.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "METIS_ASSETS_FILE",
+          "description": "Path to a JSON file of extra assets to register alongside the built-in universe.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "METIS_MCP_STATE_DIR",
+          "description": "Directory for the local observation history. Set to \"off\" to keep history in memory only.",
+          "isRequired": false,
+          "isSecret": false
+        },
+        {
+          "name": "METIS_MCP_TIMEOUT_MS",
+          "description": "Network timeout per outbound request, in milliseconds. Defaults to 20000.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}
