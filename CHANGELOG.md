@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.0
+
+First release.
 
 - Pool data survives a rate-limited venue aggregator. DexScreener refuses
   datacenter traffic, so a server running anywhere but a laptop used to lose
@@ -11,11 +13,6 @@
   evidence at lower reliability.
 - Snapshots and history carry a holder wallet count, and
   `get_holder_concentration` reports it alongside the largest accounts.
-
-## 0.1.0
-
-First release.
-
 - Twelve tools over stdio. On chain: `get_token_controls`, `get_token_supply`,
   `get_holder_concentration`, `get_token_market`, `get_reference_premium`,
   `list_rwa_assets`. Research: `observe_asset`, `get_observation_history`,
