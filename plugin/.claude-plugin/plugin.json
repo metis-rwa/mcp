@@ -2,7 +2,7 @@
   "name": "metis",
   "displayName": "Metis RWA Research",
   "version": "0.1.1",
-  "description": "Research tokenized real-world assets on Solana: issuer controls, supply, holder concentration, liquidity, and the gap between a token and the security it tracks.",
+  "description": "Ask who controls a tokenized stock on Solana, whether you could sell it again, and how far it trades from the security it tracks. Every answer is a live on-chain and market read, stamped with its source. Read only, no credentials, nothing runs locally.",
   "author": {
     "name": "Metis",
     "url": "https://metisagent.co"

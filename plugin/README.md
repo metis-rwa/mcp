@@ -55,6 +55,25 @@ signing, and a pause switch. None of that makes it a scam. A redeemable backed
 asset needs most of those powers. It is simply worth knowing before you decide
 what the token is worth.
 
+## What it does and does not do
+
+Worth being explicit, since a plugin can carry a server that runs on your
+machine:
+
+- **Nothing executes locally.** The bundled MCP server is a remote HTTPS
+  endpoint, `https://metisagent.co/mcp`. No process starts on your computer, no
+  binary is downloaded, and no Node runtime is required.
+- **It is read only.** Every tool reads public data: Solana chain state, public
+  DEX and price endpoints, and research already published at metisagent.co.
+  Nothing signs a transaction, moves funds, or writes anywhere.
+- **It asks for no credentials.** No API key, no wallet, no login. There is no
+  configuration to fill in.
+- **It sends only what you ask about.** A tool call carries the asset symbol or
+  mint address you asked about, and nothing else from your machine or your
+  conversation.
+- **It gives no financial advice.** The skills are written to report what the
+  chain says and to end in conditions rather than a recommendation.
+
 ## Running it locally instead
 
 The same tools ship as an npm package if you want your own RPC endpoint, your

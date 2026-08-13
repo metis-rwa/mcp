@@ -57,6 +57,25 @@ test("the plugin connects to the same endpoint the registry advertises", () => {
   assert.equal(servers[0].url, server.remotes[0].url);
 });
 
+test("plugin components sit at the plugin root, not inside .claude-plugin", () => {
+  // The documented way to get a plugin that loads but does nothing: put
+  // skills/ or .mcp.json inside .claude-plugin/ where nothing reads them.
+  const manifestDir = new URL("../plugin/.claude-plugin/", import.meta.url);
+  assert.deepEqual(readdirSync(manifestDir), ["plugin.json"]);
+  for (const required of ["skills", ".mcp.json", "README.md"]) {
+    assert.ok(
+      existsSync(new URL(`../plugin/${required}`, import.meta.url)),
+      `${required} should sit at the plugin root`,
+    );
+  }
+});
+
+test("names are kebab-case, which is what the catalog requires", () => {
+  for (const name of [marketplace.name, plugin.name, ...readdirSync(new URL("../plugin/skills/", import.meta.url))]) {
+    assert.match(name, /^[a-z0-9]+(-[a-z0-9]+)*$/, `${name} is not kebab-case`);
+  }
+});
+
 test("every skill carries a description so Claude knows when to use it", () => {
   const dir = new URL("../plugin/skills/", import.meta.url);
   const skills = readdirSync(dir);

@@ -9,7 +9,7 @@
     {
       "name": "metis",
       "source": "./plugin",
-      "description": "Ask who controls a tokenized stock, what it is trading against, and whether anything moved. Connects to the hosted Metis research server, so there is nothing to install and no key to configure.",
+      "description": "Ask who controls a tokenized stock on Solana, whether you could sell it again, and how far it trades from the security it tracks. Connects to a hosted, read-only research endpoint, so there is nothing to install and no key to configure.",
       "version": "0.1.1",
       "category": "research",
       "tags": ["rwa", "solana", "tokenized-equities", "defi", "research"],
