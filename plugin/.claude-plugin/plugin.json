@@ -1,0 +1,14 @@
+{
+  "name": "metis",
+  "displayName": "Metis RWA Research",
+  "version": "0.1.1",
+  "description": "Research tokenized real-world assets on Solana: issuer controls, supply, holder concentration, liquidity, and the gap between a token and the security it tracks.",
+  "author": {
+    "name": "Metis",
+    "url": "https://metisagent.co"
+  },
+  "homepage": "https://metisagent.co",
+  "repository": "https://github.com/metis-rwa/mcp",
+  "license": "MIT",
+  "keywords": ["rwa", "solana", "tokenized-equities", "xstocks", "research"]
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "metis": {
+      "type": "http",
+      "url": "https://metisagent.co/mcp"
+    }
+  }
+}

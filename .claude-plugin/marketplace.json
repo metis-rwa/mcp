@@ -1,0 +1,25 @@
+{
+  "name": "metis-rwa",
+  "description": "Research tools for tokenized real-world assets on Solana",
+  "owner": {
+    "name": "Metis",
+    "url": "https://metisagent.co"
+  },
+  "plugins": [
+    {
+      "name": "metis",
+      "source": "./plugin",
+      "description": "Ask who controls a tokenized stock, what it is trading against, and whether anything moved. Connects to the hosted Metis research server, so there is nothing to install and no key to configure.",
+      "version": "0.1.1",
+      "category": "research",
+      "tags": ["rwa", "solana", "tokenized-equities", "defi", "research"],
+      "author": {
+        "name": "Metis",
+        "url": "https://metisagent.co"
+      },
+      "homepage": "https://metisagent.co",
+      "repository": "https://github.com/metis-rwa/mcp",
+      "license": "MIT"
+    }
+  ]
+}

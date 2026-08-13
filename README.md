@@ -11,7 +11,24 @@ The point is the first question anyone should ask about a tokenized asset and
 almost nobody can answer quickly: who controls this token, and what happens to
 my position if they use that control?
 
-## Two ways to connect
+## Three ways to connect
+
+**As a plugin.** The easiest path, and the only one that also carries the
+skills. In Claude Code:
+
+```
+/plugin marketplace add metis-rwa/mcp
+```
+
+```
+/plugin install metis@metis-rwa
+```
+
+In Claude Desktop or on the web, open Customize, then Plugins, then add from a
+repository with `https://github.com/metis-rwa/mcp.git`. The plugin connects to
+the hosted endpoint and adds `/metis:due-diligence`, `/metis:premium-watch`,
+and a `token-safety` skill that runs whenever someone asks who controls a
+token. See [plugin/README.md](plugin/README.md).
 
 **Hosted, nothing to install.** The same tools are served over HTTP at
 `https://metisagent.co/mcp`:
