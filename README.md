@@ -13,10 +13,10 @@ my position if they use that control?
 
 ## Install
 
-Run it straight from the repository with npx:
+Run it with npx, no install:
 
 ```bash
-npx -y github:metis-rwa/mcp
+npx -y @metisagent/mcp
 ```
 
 Or clone and build:
@@ -36,7 +36,7 @@ The server speaks MCP over stdio.
 Claude Code:
 
 ```bash
-claude mcp add metis -- npx -y github:metis-rwa/mcp
+claude mcp add metis -- npx -y @metisagent/mcp
 ```
 
 Claude Desktop, in `claude_desktop_config.json`:
@@ -46,7 +46,7 @@ Claude Desktop, in `claude_desktop_config.json`:
   "mcpServers": {
     "metis": {
       "command": "npx",
-      "args": ["-y", "github:metis-rwa/mcp"],
+      "args": ["-y", "@metisagent/mcp"],
       "env": {
         "SOLANA_RPC_URL": "https://your-endpoint.example/rpc"
       }
@@ -206,7 +206,7 @@ history store. They run against the build, so `npm test` builds first.
 
 ## Releasing
 
-The package publishes to npm as `@metis-rwa/mcp`, and `server.json` describes it
+The package publishes to npm as `@metisagent/mcp`, and `server.json` describes it
 for the MCP registry. The registry proves ownership by matching `mcpName` in
 `package.json` against the server name in `server.json`, so those two strings
 have to stay in step.

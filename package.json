@@ -1,5 +1,5 @@
 {
-  "name": "@metis-rwa/mcp",
+  "name": "@metisagent/mcp",
   "version": "0.1.0",
   "mcpName": "io.github.metis-rwa/mcp",
   "description": "Model Context Protocol server for tokenized real-world-asset research on Solana: live on-chain checks, market signals, and the published Metis research corpus.",

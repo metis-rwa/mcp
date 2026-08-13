@@ -13,7 +13,7 @@
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
-      "identifier": "@metis-rwa/mcp",
+      "identifier": "@metisagent/mcp",
       "version": "0.1.0",
       "transport": {
         "type": "stdio"
