@@ -11,9 +11,21 @@ The point is the first question anyone should ask about a tokenized asset and
 almost nobody can answer quickly: who controls this token, and what happens to
 my position if they use that control?
 
-## Install
+## Two ways to connect
 
-Run it with npx, no install:
+**Hosted, nothing to install.** The same tools are served over HTTP at
+`https://metisagent.co/mcp`:
+
+```bash
+claude mcp add --transport http metis https://metisagent.co/mcp
+```
+
+The hosted endpoint answers observation questions from the research agent's own
+stored history, which goes back further than any single machine can. It reads
+only, needs no key, and holds no session.
+
+**Local, over stdio.** Run the package when you want your own RPC endpoint, your
+own asset list, or history kept on your machine:
 
 ```bash
 npx -y @metisagent/mcp
@@ -31,7 +43,7 @@ node dist/index.js
 
 The server speaks MCP over stdio.
 
-## Connect it
+## Connect the local server
 
 Claude Code:
 
@@ -174,7 +186,9 @@ stored for that asset, then reports:
 
 History lives on the machine running the server. The first call on an asset has
 no baseline, so only the premium threshold can fire. Call it again over time and
-supply, liquidity, activity, and concentration detections come alive.
+supply, liquidity, activity, and concentration detections come alive. The hosted
+endpoint skips that warm-up entirely: it compares against the history the
+research agent has been recording every ten minutes since it went live.
 
 ## Limits worth stating
 

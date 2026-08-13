@@ -3,7 +3,7 @@
   "name": "io.github.metis-rwa/mcp",
   "title": "Metis RWA Research",
   "description": "Research tokenized real-world assets on Solana: issuer controls, supply, liquidity, premiums",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "websiteUrl": "https://metisagent.co",
   "repository": {
     "url": "https://github.com/metis-rwa/mcp",
@@ -14,7 +14,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "@metisagent/mcp",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "transport": {
         "type": "stdio"
       },
@@ -50,6 +50,12 @@
           "isSecret": false
         }
       ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://metisagent.co/mcp"
     }
   ]
 }

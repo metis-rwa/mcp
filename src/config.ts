@@ -38,9 +38,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     solanaRpcUrl: env.SOLANA_RPC_URL?.trim() || DEFAULT_RPC,
     stateDir,
     requestTimeoutMs: Number.isFinite(timeout) && timeout > 0 ? timeout : 20_000,
-    userAgent: "metis-mcp/0.1.0 (+https://metisagent.co)",
+    userAgent: "metis-mcp/0.1.1 (+https://metisagent.co)",
   };
 }
 
 export const SERVER_NAME = "metis-rwa";
-export const SERVER_VERSION = "0.1.0";
+export const SERVER_VERSION = "0.1.1";

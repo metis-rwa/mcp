@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.1
+
+- Declare the hosted endpoint. The same twelve tools are served over HTTP at
+  `https://metisagent.co/mcp`, with no install and with observation history
+  going back to when the research agent went live. `server.json` now lists it
+  as a remote, so clients browsing the MCP registry can connect either way.
+- Tests hold the four copies of the version string in agreement, since the
+  registry refuses a publish where its copy disagrees with npm.
+
 ## 0.1.0
 
 First release.
