@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+- Pool data survives a rate-limited venue aggregator. DexScreener refuses
+  datacenter traffic, so a server running anywhere but a laptop used to lose
+  liquidity and volume entirely. Those two fields now fall back to the price
+  service, while transaction counts, pool count, and the second venue price
+  stay null rather than being invented from a source that does not measure
+  them. The failure is still reported and the fallback is cited as its own
+  evidence at lower reliability.
+- Snapshots and history carry a holder wallet count, and
+  `get_holder_concentration` reports it alongside the largest accounts.
+
 ## 0.1.0
 
 First release.

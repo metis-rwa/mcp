@@ -33,6 +33,9 @@ export interface SignalSnapshot {
   pairCount: number | null;
   topPoolDex: string | null;
   top5HolderShare: number | null;
+  /** Wallets holding the token, as the price service counts them. Null when
+   *  that source did not answer. */
+  holderCount: number | null;
   evidence: EvidenceRow[];
   /** Sources that failed this cycle, recorded rather than imputed. */
   failedSources: string[];
@@ -47,6 +50,9 @@ export interface BaselinePoint {
   volume24hUsd: number | null;
   txnsH1: number | null;
   top5HolderShare: number | null;
+  /** Added after the first release, so points written before it lack the
+   *  field. Readers treat a missing value as unknown, not as zero. */
+  holderCount?: number | null;
 }
 
 export function toBaselinePoint(snapshot: SignalSnapshot): BaselinePoint {
@@ -58,6 +64,7 @@ export function toBaselinePoint(snapshot: SignalSnapshot): BaselinePoint {
     volume24hUsd: snapshot.volume24hUsd,
     txnsH1: snapshot.txnsH1,
     top5HolderShare: snapshot.top5HolderShare,
+    holderCount: snapshot.holderCount,
   };
 }
 

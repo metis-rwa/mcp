@@ -76,6 +76,7 @@ export function registerResearchTools(server: McpServer, ctx: ToolContext): void
                 ["Txns 24h / 1h", `${num(snapshot.txns24h)} / ${num(snapshot.txnsH1)}`],
                 ["Pools", num(snapshot.pairCount)],
                 ["Top 5 account share", pct(snapshot.top5HolderShare)],
+                ["Holder wallets", num(snapshot.holderCount)],
               ],
             ),
           ),
@@ -176,7 +177,7 @@ export function registerResearchTools(server: McpServer, ctx: ToolContext): void
             `# ${resolved.label} observation history`,
             `${points.length} point(s) from ${first.capturedAt} to ${last.capturedAt}. Stored at ${ctx.history.location()}.`,
             table(
-              ["Captured", "Premium", "Supply", "Liquidity", "Txns 1h", "Top 5 share"],
+              ["Captured", "Premium", "Supply", "Liquidity", "Txns 1h", "Top 5 share", "Holders"],
               points.map((p) => [
                 p.capturedAt,
                 bps(p.premiumBps),
@@ -184,6 +185,7 @@ export function registerResearchTools(server: McpServer, ctx: ToolContext): void
                 usd(p.liquidityUsd),
                 num(p.txnsH1),
                 pct(p.top5HolderShare),
+                num(p.holderCount ?? null),
               ]),
             ),
             section(

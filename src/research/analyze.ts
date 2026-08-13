@@ -205,6 +205,27 @@ export function analyzeSnapshot(
     }
   }
 
+  // Loose comparison on purpose: a snapshot from an older build has no field
+  // here at all, and an absent count is unknown, not zero.
+  if (snapshot.holderCount != null) {
+    const priorCount = [...baseline].reverse().find((b) => b.holderCount != null)
+      ?.holderCount;
+    observations.push({
+      kind: "holder_count",
+      statement: `${snapshot.holderCount.toLocaleString("en-US")} wallets hold the token${
+        priorCount
+          ? ` (${snapshot.holderCount >= priorCount ? "+" : ""}${round(((snapshot.holderCount - priorCount) / priorCount) * 100, 2)}% versus the last observation that counted them)`
+          : ""
+      }.`,
+      metric: {
+        name: "holder_count",
+        value: snapshot.holderCount,
+        unit: "wallets",
+        baseline: priorCount ?? undefined,
+      },
+    });
+  }
+
   if (
     snapshot.tokenPriceUsd !== null &&
     snapshot.dexPriceUsd !== null &&

@@ -88,6 +88,22 @@ export async function collectSnapshot(
     }),
   ]);
 
+  // Pool numbers the venue aggregator could not supply, plus the holder count
+  // it never reports. Fetched only when it is worth a request: the aggregator
+  // failed, or nothing but the holder count is missing. It fills fields rather
+  // than replacing them, so a healthy aggregator stays authoritative and the
+  // two are never mixed inside one field.
+  const stats = await jupiter
+    .getTokenStats([asset.mint])
+    .then((result) => ({ record: result.record, entry: result.stats.get(asset.mint) }))
+    .catch((error) => {
+      failedSources.push(`jupiter_tokens: ${reason(error)}`);
+      return null;
+    });
+  const filled =
+    market === null &&
+    (stats?.entry?.liquidityUsd != null || stats?.entry?.volume24hUsd != null);
+
   if (holders) {
     evidence.push(
       evidenceFrom(
@@ -120,6 +136,20 @@ export async function collectSnapshot(
       ),
     );
   }
+  if (stats?.entry) {
+    evidence.push(
+      evidenceFrom(
+        stats.record,
+        filled
+          ? `${label} pooled liquidity and 24h volume, standing in for the venue aggregator`
+          : `${label} holder count`,
+        "market",
+        // Thinner than the aggregator it stands in for, and it does not say
+        // which pools the number came from.
+        "medium",
+      ),
+    );
+  }
 
   return {
     assetLabel: asset.registered?.name ?? label,
@@ -134,13 +164,16 @@ export async function collectSnapshot(
     premiumBps: price?.premiumBps ?? null,
     priceChange24hPct: price?.priceChange24hPct ?? null,
     dexPriceUsd: market?.priceUsd ?? null,
-    liquidityUsd: market?.liquidityUsd ?? null,
-    volume24hUsd: market?.volume24hUsd ?? null,
+    liquidityUsd: market?.liquidityUsd ?? stats?.entry?.liquidityUsd ?? null,
+    volume24hUsd: market?.volume24hUsd ?? stats?.entry?.volume24hUsd ?? null,
+    // Measured by the aggregator alone. Left null rather than invented from a
+    // source that does not count them.
     txns24h: market?.txns24h ?? null,
     txnsH1: market?.txnsH1 ?? null,
     pairCount: market?.pairCount ?? null,
     topPoolDex: market?.topPoolDex ?? null,
     top5HolderShare: holders?.top5Share ?? null,
+    holderCount: stats?.entry?.holderCount ?? null,
     evidence,
     failedSources,
   };

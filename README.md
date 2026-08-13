@@ -180,6 +180,11 @@ supply, liquidity, activity, and concentration detections come alive.
 
 - Largest token accounts are accounts, not beneficial owners. Pools, bridges,
   and custodial accounts sit at the top of most lists.
+- DexScreener refuses datacenter traffic. Run the server from a laptop and it
+  answers; run it from a cloud host and pool data falls back to the price
+  service, which reports liquidity, 24h volume, and a holder count but no pool
+  breakdown and no transaction counts. Tools say when a number came from the
+  standby.
 - A republished reference price can be stale outside market hours, and that
   alone can look like a premium.
 - Aggregated venue data covers listed pools. Anything traded over the counter

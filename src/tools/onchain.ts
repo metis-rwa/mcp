@@ -197,9 +197,16 @@ export function registerOnChainTools(server: McpServer, ctx: ToolContext): void 
           account.frozen === undefined ? "n/a" : account.frozen ? "frozen" : "active",
         ]);
 
+        // Best effort: the account list is the answer, the wallet count is
+        // context, so a failure here does not fail the tool.
+        const holderCount = await ctx.jupiter
+          .getTokenStats([resolved.mint])
+          .then((result) => result.stats.get(resolved.mint)?.holderCount ?? null)
+          .catch(() => null);
+
         const parts = [
           `# ${resolved.registered?.name ?? resolved.label} concentration`,
-          `Top 5 accounts hold ${pct(holders.top5Share)} of supply, top 10 hold ${pct(holders.top10Share)}. Supply is ${num(supply.uiAmount, 2)} tokens.`,
+          `Top 5 accounts hold ${pct(holders.top5Share)} of supply, top 10 hold ${pct(holders.top10Share)}. Supply is ${num(supply.uiAmount, 2)} tokens${holderCount !== null ? `, spread across ${num(holderCount)} holder wallets` : ""}.`,
           table(
             ["#", "Token account", "Balance", "Share", "Owner", "State"],
             rows,
@@ -235,7 +242,38 @@ export function registerOnChainTools(server: McpServer, ctx: ToolContext): void 
     async ({ asset, pools }) =>
       guard(async () => {
         const resolved = resolveAsset(asset);
-        const market = await ctx.dex.getMarketState(resolved.mint);
+        const market = await ctx.dex.getMarketState(resolved.mint).catch(async (error) => {
+          // The venue aggregator rate-limits datacenter traffic, so a server
+          // running anywhere but a laptop loses pool data first. Fall back to
+          // the price service, which measures less but answers.
+          const stats = await ctx.jupiter
+            .getTokenStats([resolved.mint])
+            .then((result) => result.stats.get(resolved.mint))
+            .catch(() => null);
+          if (!stats || (stats.liquidityUsd === null && stats.volume24hUsd === null)) {
+            throw error;
+          }
+          return { degraded: error instanceof Error ? error.message : String(error), stats };
+        });
+
+        if ("degraded" in market) {
+          const { stats } = market;
+          return ok(
+            [
+              `# ${resolved.registered?.name ?? resolved.label} market state (partial)`,
+              [
+                `Pooled liquidity: ${usd(stats.liquidityUsd)}`,
+                `24h volume: ${usd(stats.volume24hUsd)}`,
+                `Holder wallets: ${num(stats.holderCount)}`,
+                `24h price change: ${stats.priceChange24hPct !== null ? `${stats.priceChange24hPct.toFixed(2)}%` : "n/a"}`,
+              ]
+                .map((l) => `- ${l}`)
+                .join("\n"),
+              `The venue aggregator did not answer (${market.degraded}), so these come from the price service instead. It reports no pool breakdown and no transaction counts, and those are left out rather than guessed.`,
+            ].join("\n\n"),
+          );
+        }
+
         const turnover =
           market.liquidityUsd > 0 ? market.volume24hUsd / market.liquidityUsd : null;
 

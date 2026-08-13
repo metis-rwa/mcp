@@ -100,6 +100,20 @@ test("supply, liquidity, activity, and concentration need a baseline", () => {
   ]);
 });
 
+test("a holder count is reported when present and skipped when the source stayed quiet", () => {
+  const without = analyzeSnapshot(snapshot(), []);
+  assert.equal(without.observations.some((o) => o.kind === "holder_count"), false);
+
+  const with5k = analyzeSnapshot(snapshot({ holderCount: 5000 }), [
+    baselinePoint({ holderCount: 4000 }),
+  ]);
+  const line = with5k.observations.find((o) => o.kind === "holder_count");
+  assert.ok(line, "expected a holder count observation");
+  assert.match(line.statement, /5,000 wallets/);
+  assert.match(line.statement, /\+25%/);
+  assert.equal(line.metric.baseline, 4000);
+});
+
 test("venue price disagreement is recorded as a conflict, not a detection", () => {
   const result = analyzeSnapshot(snapshot({ dexPriceUsd: 101 }), []);
   assert.equal(result.conflicts.length, 1);
